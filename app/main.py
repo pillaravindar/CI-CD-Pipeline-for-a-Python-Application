@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 app = FastAPI(
     title="FASTAPI task manager",
-    description="A simple task manager API build for DevOps project"
+    description="A simple task manager API build for DevOps project",
     version="1.0"
 )
 
@@ -13,6 +13,6 @@ def root():
 @app.get("/health")
 def health_check():
     return{
-        status:"active",
-        message:"Application is running "
+        "status":"active",
+        "message":"Application is running "
     }
