@@ -1,5 +1,5 @@
 from fastapi import FastAPI,HTTPException
-from app.schemas import TaskCreate,TaskResponse
+from app.schemas import TaskCreate,TaskResponse,TaskUpdate
 
 app = FastAPI(
     title="FASTAPI task manager",
@@ -50,3 +50,31 @@ def get_task(task_id:int):
             return task
         
     raise HTTPException(status_code=404,detail="Task not found")
+
+@app.put("/tasks",response_model=TaskResponse)
+def put_task(task_id:int,updated_task:TaskUpdate):
+    for task in tasks:
+        if(task["id"]==task_id):
+            task["title"]=updated_task.title
+            task["description"]=updated_task.description
+            task["completed"]=updated_task.completed
+            return task
+    raise HTTPException(status_code=404,detail="Task not found")
+
+@app.delete("/tasks/{task_id}")
+def delete_task(task_id: int):
+
+    for task in tasks:
+
+        if task["id"] == task_id:
+
+            tasks.remove(task)
+
+            return {
+                "message": "Task deleted successfully"
+            }
+
+    raise HTTPException(
+        status_code=404,
+        detail="Task not found"
+    )
