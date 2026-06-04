@@ -11,7 +11,7 @@ task_id_counter=1
 
 @app.get("/")
 def root():
-    return {"message": "Hello Internship Project"}
+    return {"message": "Hello, this is my Internship Project"}
 
 @app.get("/health")
 def health_check():
