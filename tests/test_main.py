@@ -1,6 +1,12 @@
+import pytest
 from fastapi.testclient import TestClient
+import app.main as main
 from app.main import app
 client =TestClient(app)
+@pytest.fixture(autouse=True)
+def reset_tasks():
+    main.tasks.clear()
+    main.tasks_id_counter=1
 def test_root_endpoint():
     response=client.get("/")
     assert response.status_code==200
@@ -25,6 +31,26 @@ def test_create_task():
     assert data["description"]=="task1 is important"
     assert data["completed"] is False
     assert "id" in data
+
+def test_create_task_with_no_value():
+    response=client.post(
+        "/tasks",
+        json={
+            "title":"",
+            "description":"wrong title"
+        }
+    )
+    assert response.status_code==422
+
+def test_create_task_with_spaces():
+    response=client.post(
+        "/tasks",
+        json={
+            "title":"    ",
+            "description":"wrong title"
+        }
+    )
+    assert response.status_code==422
 
 def test_get_tasks():
 
@@ -107,6 +133,44 @@ def test_update_task_not_found():
     )
     assert response.status_code==404
     assert response.json()["detail"]=="Task not found"
+
+def test_update_task_with_no_title():
+    create_response=client.post(
+        "/tasks",
+        json={
+            "title":"old title",
+            "description":"old description"
+        }
+    )
+    create_task_id=create_response.json()["id"]
+    update_response=client.put(
+        f"/tasks/{create_task_id}",
+        json={
+            "title":"",
+            "description":"empty title",
+            "completed":True
+        }
+    )
+    assert update_response.status_code==422
+
+def test_update_task_with_spaces():
+    create_response=client.post(
+        "tasks",
+        json={
+            "title":"old title",
+            "description":"old description"
+        } 
+    )
+    create_task_id=create_response.json()["id"]
+    update_response=client.put(
+        f"/tasks/{create_task_id}",
+        json={
+            "title":"     ",
+            "description":"wrong title",
+            "completed":True
+        }
+    )
+    assert update_response.status_code==422
 
 def test_delete_task():
     create_response=client.post(
