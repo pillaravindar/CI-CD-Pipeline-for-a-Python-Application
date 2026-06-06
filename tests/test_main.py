@@ -71,3 +71,61 @@ def test_get_task_not_found():
     response = client.get("/tasks/999999")
     response.status_code==404
     response.json()["detail"]=="Task not found"
+
+def test_update_task():
+    create_response=client.post(
+        "/tasks",
+        json={
+            "title":"old title",
+            "description":"old description"
+        }
+    )
+    create_task=create_response.json()
+    create_task_id=create_task["id"]
+    update_response = client.put(
+        f"/tasks/{create_task_id}",
+        json={
+            "title":"new title",
+            "description":"new description",
+            "completed" : True
+        }
+    )
+    assert update_response.status_code==200
+    assert update_response.json()["id"]==create_task_id
+    assert update_response.json()["title"]=="new title"
+    assert update_response.json()["description"]=="new description"
+    assert update_response.json()["completed"] is True
+
+def test_update_task_not_found():
+    response=client.put(
+        "/tasks/9999999",
+        json={
+            "title":"Missing Task",
+            "description":"Missing description",
+            "completed":True
+        }
+    )
+    assert response.status_code==404
+    assert response.json()["detail"]=="Task not found"
+
+def test_delete_task():
+    create_response=client.post(
+        "/tasks",
+        json={
+            "title":"task to delete",
+            "description":"task is being deleted"
+        }
+    )
+    create_task=create_response.json()
+    create_task_id=create_task["id"]
+    delete_task=client.delete(f"/tasks/{create_task_id}")
+    assert delete_task.status_code==200
+    assert delete_task.json()["message"]=="Task deleted successfully"
+    get_task=client.get(f"/tasks/{create_task_id}")
+    assert get_task.status_code==404
+    assert get_task.json()["detail"]=="Task not found"
+
+def test_delete_task_not_found():
+    response=client.delete("/tasks/9999999")
+    assert response.status_code==404
+    assert response.json()["detail"]=="Task not found"

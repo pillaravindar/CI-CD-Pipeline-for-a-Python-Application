@@ -51,15 +51,16 @@ def get_task(task_id:int):
         
     raise HTTPException(status_code=404,detail="Task not found")
 
-@app.put("/tasks",response_model=TaskResponse)
-def put_task(task_id:int,updated_task:TaskUpdate):
+@app.put("/tasks/{task_id}", response_model=TaskResponse)
+def update_task(task_id: int, updated_task: TaskUpdate):
     for task in tasks:
-        if(task["id"]==task_id):
-            task["title"]=updated_task.title
-            task["description"]=updated_task.description
-            task["completed"]=updated_task.completed
+        if task["id"] == task_id:
+            task["title"] = updated_task.title
+            task["description"] = updated_task.description
+            task["completed"] = updated_task.completed
             return task
-    raise HTTPException(status_code=404,detail="Task not found")
+
+    raise HTTPException(status_code=404, detail="Task not found")
 
 @app.delete("/tasks/{task_id}")
 def delete_task(task_id: int):
