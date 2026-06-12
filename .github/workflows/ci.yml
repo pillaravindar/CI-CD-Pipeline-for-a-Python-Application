@@ -31,4 +31,7 @@ jobs:
             run: ruff check .
 
           - name: Run tests
-            run: 
+            run: pytest
+
+          - name: Build Docker
+            run: docker build -t fast-api-task-manager .
