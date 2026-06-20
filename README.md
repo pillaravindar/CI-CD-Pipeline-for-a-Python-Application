@@ -2,9 +2,11 @@
 
 ## Project Overview
 
-This project demonstrates the development of a production-style Python application using **FastAPI** along with modern **DevOps practices** including automated testing, code quality checks, continuous integration, and Docker containerization.
+This project demonstrates the development, testing, containerization, automation, and deployment of a Python-based REST API using FastAPI and modern DevOps practices.
 
-The application is a Task Management REST API that allows users to create, retrieve, update, and delete tasks while showcasing a complete CI/CD workflow.
+The application is a Task Management API that supports Create, Read, Update, and Delete (CRUD) operations while showcasing Continuous Integration (CI), automated testing, code quality checks, Docker containerization, and cloud deployment.
+
+The objective of the project is to implement a complete software development lifecycle workflow from development to deployment using industry-standard tools and practices.
 
 ---
 
@@ -12,42 +14,43 @@ The application is a Task Management REST API that allows users to create, retri
 
 ## Application Features
 
-* Create Tasks
-* Retrieve All Tasks
-* Retrieve Individual Tasks
-* Update Existing Tasks
-* Delete Tasks
+* Task Creation
+* Task Retrieval
+* Individual Task Lookup
+* Task Update
+* Task Deletion
 * Health Check Endpoint
-* Input Validation using Pydantic
+* Request Validation
 * Error Handling
-* Automatic API Documentation
+* Interactive API Documentation
 
 ## DevOps Features
 
 * Git Version Control
 * GitHub Repository Management
-* Automated Testing with Pytest
-* Code Quality Checks with Ruff
+* Automated Testing using Pytest
+* Code Quality Checks using Ruff
 * Continuous Integration using GitHub Actions
 * Docker Containerization
-* Docker Image Build Verification
-* Deployment Preparation
+* Docker Build Verification
+* Cloud Deployment using Render
 
 ---
 
 # Technology Stack
 
-| Component          | Technology     |
-| ------------------ | -------------- |
-| Backend Framework  | FastAPI        |
-| Language           | Python 3.12    |
-| Validation         | Pydantic       |
-| Testing            | Pytest         |
-| Code Quality       | Ruff           |
-| Version Control    | Git            |
-| Repository Hosting | GitHub         |
-| CI/CD              | GitHub Actions |
-| Containerization   | Docker         |
+| Category             | Technology     |
+| -------------------- | -------------- |
+| Programming Language | Python 3.12    |
+| Framework            | FastAPI        |
+| Validation           | Pydantic       |
+| Testing              | Pytest         |
+| Linting              | Ruff           |
+| Version Control      | Git            |
+| Repository Hosting   | GitHub         |
+| CI/CD                | GitHub Actions |
+| Containerization     | Docker         |
+| Deployment Platform  | Render         |
 
 ---
 
@@ -73,6 +76,8 @@ CI-CD-Pipeline-for-a-Python-Application/
 ├── pytest.ini
 ├── requirements.txt
 ├── README.md
+├── DEPLOYMENT.md
+├── FINAL_REPORT.md
 └── .gitignore
 ```
 
@@ -80,163 +85,15 @@ CI-CD-Pipeline-for-a-Python-Application/
 
 # API Endpoints
 
-## Root Endpoint
-
-Returns a welcome message.
-
-```http
-GET /
-```
-
-### Example Response
-
-```json
-{
-  "message": "Hello, this is my Internship Project"
-}
-```
-
----
-
-## Health Check Endpoint
-
-Checks whether the application is running.
-
-```http
-GET /health
-```
-
-### Example Response
-
-```json
-{
-  "status": "active"
-}
-```
-
----
-
-## Create Task
-
-Creates a new task.
-
-```http
-POST /tasks
-```
-
-### Request Body
-
-```json
-{
-  "title": "Learn FastAPI",
-  "description": "Complete FastAPI CRUD project"
-}
-```
-
-### Response
-
-```json
-{
-  "id": 1,
-  "title": "Learn FastAPI",
-  "description": "Complete FastAPI CRUD project",
-  "completed": false
-}
-```
-
----
-
-## Get All Tasks
-
-Returns all available tasks.
-
-```http
-GET /tasks
-```
-
----
-
-## Get Task by ID
-
-Returns a specific task.
-
-```http
-GET /tasks/{task_id}
-```
-
----
-
-## Update Task
-
-Updates an existing task.
-
-```http
-PUT /tasks/{task_id}
-```
-
-### Request Body
-
-```json
-{
-  "title": "Updated Task",
-  "description": "Updated Description",
-  "completed": true
-}
-```
-
----
-
-## Delete Task
-
-Deletes a task.
-
-```http
-DELETE /tasks/{task_id}
-```
-
----
-
-# Input Validation
-
-The project uses **Pydantic** for request validation.
-
-Validation includes:
-
-* Required title field
-* Required description field
-* Empty value prevention
-* Type validation
-* Request structure validation
-
-Benefits:
-
-* Prevents invalid requests
-* Improves application reliability
-* Reduces runtime errors
-
----
-
-# Error Handling
-
-The API handles common errors gracefully.
-
-Examples:
-
-### Task Not Found
-
-```json
-{
-  "detail": "Task not found"
-}
-```
-
-### Validation Error
-
-```json
-{
-  "detail": "Validation error"
-}
-```
+| Method | Endpoint         | Description         |
+| ------ | ---------------- | ------------------- |
+| GET    | /                | Root Endpoint       |
+| GET    | /health          | Health Check        |
+| POST   | /tasks           | Create Task         |
+| GET    | /tasks           | Retrieve All Tasks  |
+| GET    | /tasks/{task_id} | Retrieve Task by ID |
+| PUT    | /tasks/{task_id} | Update Task         |
+| DELETE | /tasks/{task_id} | Delete Task         |
 
 ---
 
@@ -249,23 +106,25 @@ git clone <repository-url>
 cd CI-CD-Pipeline-for-a-Python-Application
 ```
 
----
-
 ## Create Virtual Environment
 
-### Windows
-
-```powershell
+```bash
 python -m venv venv
 ```
 
-Activate:
+Activate Environment
+
+### Windows
 
 ```powershell
 .\venv\Scripts\activate
 ```
 
----
+### Linux / Mac
+
+```bash
+source venv/bin/activate
+```
 
 ## Install Dependencies
 
@@ -273,9 +132,7 @@ Activate:
 pip install -r requirements.txt
 ```
 
----
-
-## Start FastAPI Server
+## Start Application
 
 ```bash
 uvicorn app.main:app --reload
@@ -287,193 +144,136 @@ Application URL:
 http://127.0.0.1:8000
 ```
 
----
-
-## Swagger Documentation
-
-Interactive API documentation:
+Swagger Documentation:
 
 ```text
 http://127.0.0.1:8000/docs
 ```
 
-ReDoc documentation:
-
-```text
-http://127.0.0.1:8000/redoc
-```
-
 ---
 
-# Automated Testing
+# Testing
 
-The project uses **Pytest** for automated testing.
-
-Current test coverage includes:
-
-* Root endpoint testing
-* Health endpoint testing
-* Task creation testing
-* Task retrieval testing
-* Task update testing
-* Task deletion testing
-* Validation testing
-* Error handling testing
-
-## Run Tests
+Run automated tests:
 
 ```bash
 pytest
 ```
 
-Expected output:
+Current Status:
 
 ```text
-14 passed
+14 Tests Passed
 ```
+
+Testing includes:
+
+* Endpoint Testing
+* CRUD Operation Testing
+* Validation Testing
+* Error Handling Testing
 
 ---
 
-# Code Quality Checks
+# Code Quality
 
-The project uses **Ruff** for linting and code quality validation.
-
-## Run Ruff
+Run Ruff checks:
 
 ```bash
 ruff check .
 ```
 
-Benefits:
+Purpose:
 
-* Cleaner code
-* Consistent style
-* Early error detection
-* Better maintainability
+* Code consistency
+* Error detection
+* Style enforcement
+* Maintainability
 
 ---
 
-# Continuous Integration Pipeline
+# Continuous Integration
 
-GitHub Actions is configured to automatically validate the project.
+GitHub Actions workflow automatically performs:
 
-Workflow file:
+* Repository Checkout
+* Python Setup
+* Dependency Installation
+* Ruff Linting
+* Pytest Execution
+* Docker Image Build Verification
+
+Workflow File:
 
 ```text
 .github/workflows/ci.yml
 ```
 
-Pipeline stages:
-
-1. Repository Checkout
-2. Python Environment Setup
-3. Dependency Installation
-4. Ruff Code Quality Checks
-5. Pytest Execution
-6. Docker Image Build Verification
-
-If any stage fails, the workflow stops automatically.
-
 ---
 
-# Docker Support
+# Docker Usage
 
-The application is containerized using Docker.
-
-## Build Docker Image
+Build Image:
 
 ```bash
 docker build -t fastapi-task-manager .
 ```
 
----
-
-## Run Docker Container
+Run Container:
 
 ```bash
 docker run -p 8000:8000 fastapi-task-manager
 ```
 
-Application will be available at:
+---
 
-```text
-http://127.0.0.1:8000
-```
+# Live Deployment
+
+Deployment Platform:
+
+Render
+
+Application URL:
+
+https://ci-cd-pipeline-for-a-python-application.onrender.com
+
+Health Endpoint:
+
+https://ci-cd-pipeline-for-a-python-application.onrender.com/health
+
+Swagger Documentation:
+
+https://ci-cd-pipeline-for-a-python-application.onrender.com/docs
 
 ---
 
-# Docker Configuration Files
+# Current Limitations
 
-## Dockerfile
+The application currently uses in-memory storage.
 
-Responsible for:
-
-* Base image selection
-* Dependency installation
-* Application startup
-
-## .dockerignore
-
-Excludes unnecessary files:
-
-```text
-venv/
-__pycache__/
-.pytest_cache/
-.git/
-.env
-```
-
----
-
-# Deployment Preparation
-
-The project has been prepared for deployment using Docker.
-
-Recommended deployment platforms:
-
-* Render
-* Railway
-* AWS
-* Azure
-* GCP
-
-Deployment documentation will be maintained separately.
-
----
-
-# Project Objectives Achieved
-
-* FastAPI Application Development
-* REST API Design
-* CRUD Operations
-* Input Validation
-* Exception Handling
-* Automated Testing
-* Code Quality Automation
-* Continuous Integration
-* Docker Containerization
-* Docker Build Verification
-* Deployment Preparation
+Data may be reset if the application service restarts.
 
 ---
 
 # Future Improvements
 
-Potential enhancements include:
-
-* Database Integration
+* SQLite Database Integration
+* SQLAlchemy ORM
+* PostgreSQL Migration
 * User Authentication
+* JWT Authorization
 * Role-Based Access Control
-* Logging Framework
+* Logging
 * Monitoring
-* Caching
-* Background Tasks
 * Automated Deployment
-* Cloud Infrastructure Integration
+* Cloud Infrastructure Expansion
 
 ---
 
+# Author
+
+Pilla Ravindar
+
 Internship Project: CI/CD Pipeline for a Python Application
 
-Built to demonstrate both Software Development and DevOps practices using modern Python tooling.
+This project demonstrates software development and DevOps practices including API development, automated testing, CI/CD implementation, containerization, and cloud deployment.
